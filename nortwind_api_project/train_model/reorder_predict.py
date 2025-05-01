@@ -13,7 +13,7 @@ import os
 import joblib
 
 # Connect to the PostgreSQL database
-db_url = "postgresql://postgres:12345@localhost:5432/Gyk1"
+db_url = "postgresql://postgres:***@localhost:***/Gyk1"
 engine = create_engine(db_url)
 
 # SQL query: customer-level purchase summary
