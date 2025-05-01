@@ -13,7 +13,15 @@ import os
 import joblib
 
 # Connect to the PostgreSQL database
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 db_url = "postgresql://postgres:***@localhost:***/Gyk1"
+=======
+db_url = "postgresql://postgres:***@localhost:5432/***"
+>>>>>>> Stashed changes
+=======
+db_url = "postgresql://postgres:***@localhost:5432/***"
+>>>>>>> Stashed changes
 engine = create_engine(db_url)
 
 # SQL query: customer-level purchase summary
