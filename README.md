@@ -4,6 +4,14 @@
 
 This project is a FastAPI application designed to predict customer reorder behavior using a trained deep learning model. The application exposes an API endpoint that accepts customer features and returns a prediction on whether the customer will place a reorder.
 
+## Team Members (Pair6)
+- **Mine Emektar
+- **Deniz Tunç
+- **Elif Barutçu
+- **Didar Arslan
+- **Nurefşan Gültekin
+- **Özge Taraşlı
+
 ## Features
 
 - **Reorder Prediction**: The API provides a prediction on whether a customer will reorder based on their historical data.
