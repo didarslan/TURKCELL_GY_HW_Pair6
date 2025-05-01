@@ -1,7 +1,10 @@
-tensorflow
-fastapi
-uvicorn
-pandas
-sqlalchemy
-psycopg2
-imblearn
+pandas==2.2.3
+numpy==1.26.4
+sqlalchemy==2.0.40
+scikit-learn==1.6.1
+tensorflow==2.16.2
+imbalanced-learn==0.13.0
+joblib==1.4.2
+fastapi==0.115.12
+pydantic==2.11.4
+uvicorn==0.34.2
