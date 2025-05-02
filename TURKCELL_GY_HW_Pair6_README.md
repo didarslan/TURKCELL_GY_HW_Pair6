@@ -8,7 +8,6 @@ Bu repo, Turkcell Geleceği Yazan Kadınlar Programı kapsamında geliştirilen 
 ## 📁 1. Ürün İade Risk Skoru API
 
 **Klasör:** [`return-risk-predictor`](./return-risk-predictor)  
-**Katılımcı:** Elif Barutçu
 
 Bu proje, müşterilerin sipariş verilerini analiz ederek iade edilme olasılığı yüksek olan siparişleri tahmin eden bir derin öğrenme modeli ve API sunar. Northwind veritabanı üzerinden alınan sipariş detayları ile model, iade riski yüksek siparişleri tanımlar.
 
@@ -46,7 +45,6 @@ Detaylı kullanım için klasör içindeki `README.md` ve `docs` dizinine bakabi
 ## 📁 2. GYK_HW - Eğitim Uygulamaları
 
 **Klasör:** [`GYK_HW`](./GYK_HW)  
-**Katılımcı:** Özge Taraşlı
 
 Bu klasör, eğitim boyunca yapılan ödev ve uygulamaları içerir. Katılımcı, veri analizi ve temel makine öğrenmesi konularında geliştirdiği çalışmalarla Python, pandas, seaborn gibi araçlarla çeşitli senaryoları analiz etmiştir.
 
@@ -61,7 +59,6 @@ Bu klasör, eğitim boyunca yapılan ödev ve uygulamaları içerir. Katılımc�
 ## 📁 3. Northwind Ürün Öneri API'si
 
 **Klasör:** [`nortwind_api_project`](./nortwind_api_project)  
-**Katılımcı:** Mine Emektar
 
 Bu proje, Northwind veri seti üzerinde çalışan makine öğrenmesi tabanlı bir ürün öneri sistemidir. Kullanıcının geçmiş satın alma verileri analiz edilerek benzer ürünler önerilir. API, FastAPI framework'ü ile servisleştirilmiştir.
 
@@ -110,12 +107,14 @@ python app.py
 
 ## 👥 Katkıda Bulunanlar
 
-| İsim           | Proje Klasörü               |
-|----------------|-----------------------------|
-| Elif Barutçu   | return-risk-predictor       |
-| Özge Taraşlı   | GYK_HW                      |
-| Mine Emektar   | nortwind_api_project        |
-| Didar Arslan   | Birleştirme & Koordinasyon  |
+| İsim           | 
+|----------------|
+| Elif Barutçu   |
+| Özge Taraşlı   | 
+| Mine Emektar   | 
+| Didar Arslan   |
+| Deniz Tunç     |
+| Nurefşan Gültekin |
 
 ---
 
