@@ -1,111 +1,145 @@
+# Turkcell GYK - Bütünleştirilmiş API Servisleri
 
-# TURKCELL_GY_HW_Pair6 - Proje Kataloğu
+Bu repoda, Turkcell Geleceği Yazan Kadınlar Programı kapsamında geliştirilen üç bağımsız ML API projesini birleştiren bir API Gateway bulunmaktadır. Bu proje, farklı adreslerdeki ML servislerini tek bir endpoint altında birleştirerek, tüm servislerin merkezi bir şekilde yönetilmesini sağlar.
 
-Bu repo, Turkcell Geleceği Yazan Kadınlar Programı kapsamında geliştirilen üç bağımsız projenin bir araya getirildiği birleşik bir çalışmadır. Her proje, veri bilimi ve yapay zeka uygulamalarını gerçek dünya problemlerine çözüm olacak şekilde ele alır.
+## Projeler
 
----
+Bu repo içerisinde üç farklı ML API projesi bulunmaktadır:
 
-## 📁 1. Ürün İade Risk Skoru API
+### 1. Return Risk Predictor (Ürün İade Risk Tahmini)
 
-**Klasör:** [`return-risk-predictor`](./return-risk-predictor)  
+**Klasör:** `return-risk-predictor`
 
-Bu proje, müşterilerin sipariş verilerini analiz ederek iade edilme olasılığı yüksek olan siparişleri tahmin eden bir derin öğrenme modeli ve API sunar. Northwind veritabanı üzerinden alınan sipariş detayları ile model, iade riski yüksek siparişleri tanımlar.
+**Açıklama:** Müşterilerin sipariş verilerini analiz ederek iade edilme olasılığı yüksek olan siparişleri tahmin eden bir derin öğrenme modeli ve API sunar.
 
-### ⚙️ Kullanılan Teknolojiler
+**Endpointler:**
+- `POST /return-risk/train`: Modeli eğitir
+- `POST /return-risk/predict`: Manuel girdi ile tahmin yapar
+- `POST /return-risk/predict_by_order`: Sipariş ID ile tahmin yapar
+
+### 2. Next Order Predictor (Sonraki Sipariş Tahmini)
+
+**Klasör:** `next-order-predictor`
+
+**Açıklama:** Müşterilerin geçmiş sipariş davranışlarını analiz ederek yakın zamanda yeni bir sipariş verme olasılığını tahmin eden bir derin öğrenme modeli ve API içerir.
+
+**Endpointler:**
+- `POST /next-order/predict`: Müşterinin yeni sipariş verme olasılığını tahmin eder
+
+### 3. New Product Purchase Predictor (Yeni Ürün Satın Alma Tahmini)
+
+**Klasör:** `new-product-purchase-predictor`
+
+**Açıklama:** Müşterinin ilgi duyduğu ürün kategorilerine göre yeni bir ürün satın alma olasılığını tahmin eden bir derin öğrenme modeli ve API sunar.
+
+**Endpointler:**
+- `POST /new-product/predict`: Müşterinin yeni ürün satın alma olasılığını tahmin eder
+
+## API Gateway Entegrasyonu
+
+**Klasör:** `api-gateway`
+
+API Gateway, yukarıdaki üç servisi birleştirerek tek bir API üzerinden erişilebilir hale getirir. Bu sayede farklı servislere ayrı ayrı istek yapmak yerine, tek bir endpoint üzerinden tüm servislere erişilebilir.
+
+### Gereksinimler
+
 - Python 3.10+
 - FastAPI
-- TensorFlow / Keras
-- scikit-learn
-- PostgreSQL
-- psycopg2
-- pandas, numpy
+- Uvicorn
+- httpx
 
-### 🔍 Model Özellikleri
-- Giriş değişkenleri: `discount`, `quantity`, `unit_price`, `total_amount`
-- Cost-sensitive learning: iade sınıfına 15x ağırlık
-- 5 katmanlı derin sinir ağı + dropout
-- Açıklanabilir tahminler (`explanation` alanı)
+### Kurulum
 
-### 📌 API Endpoint'leri
-- `POST /train`: Modeli eğitir
-- `POST /predict`: Manuel girdi ile tahmin
-- `POST /predict_by_order`: Sipariş ID ile tahmin
-
-### 📊 Tahmin Sonuçlarının Yorumlanması
-| Risk Skoru | Açıklama            |
-|------------|---------------------|
-| 0.0 - 0.3  | Düşük risk          |
-| 0.3 - 0.6  | Orta risk           |
-| 0.6 - 1.0  | Yüksek iade riski   |
-
-Detaylı kullanım için klasör içindeki `README.md` ve `docs` dizinine bakabilirsiniz.
-
----
-
-## 📁 2. GYK_HW - Eğitim Uygulamaları
-
-**Klasör:** [`GYK_HW`](./GYK_HW)  
-
-Bu klasör, eğitim boyunca yapılan ödev ve uygulamaları içerir. Katılımcı, veri analizi ve temel makine öğrenmesi konularında geliştirdiği çalışmalarla Python, pandas, seaborn gibi araçlarla çeşitli senaryoları analiz etmiştir.
-
-### 🔍 İçerikler
-- Veri temizleme ve görselleştirme örnekleri
-- Pandas pivot, merge işlemleri
-- Modelleme örnekleri
-- Jupyter notebook tabanlı projeler
-
----
-
-## 📁 3. Northwind Ürün Öneri API'si
-
-**Klasör:** [`nortwind_api_project`](./nortwind_api_project)  
-
-Bu proje, Northwind veri seti üzerinde çalışan makine öğrenmesi tabanlı bir ürün öneri sistemidir. Kullanıcının geçmiş satın alma verileri analiz edilerek benzer ürünler önerilir. API, FastAPI framework'ü ile servisleştirilmiştir.
-
-### 🧠 Kullanılan Yöntemler
-- KMeans tabanlı segmentasyon
-- Kullanıcıya özel öneri mantığı
-- Model eğitimi ve tahmin endpoint'leri
-
-### 📌 API Özellikleri
-- `/train`: modeli eğitir
-- `/recommend`: kullanıcıya ürün önerir
-- PostgreSQL veritabanına bağlanarak Northwind verisini kullanır
-
----
-
-## 🧪 Kurulum ve Çalıştırma
-
-1. Reposu klonlayın:
+1. Gerekli paketleri yükleyin:
 ```bash
-git clone https://github.com/didarslan/TURKCELL_GY_HW_Pair6.git
-cd TURKCELL_GY_HW_Pair6
+cd api-gateway
+pip install fastapi uvicorn httpx pydantic python-dotenv
 ```
 
-2. Her klasör için:
+Ayrıca, her bir servisin çalışması için ilgili klasörlerdeki requirements.txt dosyalarını yüklemeniz gerekebilir.
+
+### Çalıştırma
+
+Tüm servisleri ve API Gateway'i tek bir komutla başlatmak için:
+
 ```bash
-cd [klasör_adı]
-pip install -r requirements.txt
+cd api-gateway
+debug_start.bat
 ```
 
-3. `.env` dosyası oluşturarak veritabanı bilgilerinizi girin:
-```
-DB_USER=your_username
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_PORT=5432
+Bu komut sırasıyla:
+1. Return Risk API'yi başlatır (port 8001)
+2. Next Order API'yi başlatır (port 8002) 
+3. New Product API'yi başlatır (port 8003)
+4. API Gateway'i başlatır (port 8080)
+
+### Kullanım
+
+API Gateway'e erişmek için: `http://localhost:8080/docs`
+
+Swagger UI üzerinden tüm endpointleri test edebilirsiniz. API Gateway, isteği uygun servise yönlendirir ve yanıtı alıp size geri döndürür.
+
+## Örnek İstekler
+
+### İade Risk Tahmini
+
+```json
+POST /return-risk/predict
+{
+  "discount": 0.1,
+  "quantity": 5,
+  "unit_price": 29.99,
+  "total_amount": 134.95
+}
 ```
 
-4. API'leri başlatmak için:
-```bash
-uvicorn app:app --reload
-# veya
-python app.py
+### Sonraki Sipariş Tahmini
+
+```json
+POST /next-order/predict
+{
+  "total_spent": 500.0,
+  "total_orders": 10,
+  "avg_order_value": 50.0,
+  "days_since_last_order": 30,
+  "last_order_month": 3,
+  "last_order_season": 1
+}
 ```
 
----
+### Yeni Ürün Satın Alma Tahmini
 
-## 👥 Katkıda Bulunanlar
+```json
+POST /new-product/predict
+{
+  "categories": [0, 1, 0, 0, 1, 0, 1, 0]
+}
+```
+
+## Mimari
+
+```
+                    ┌───────────────────┐
+                    │                   │
+                    │   API Gateway     │
+                    │   (port 8080)     │
+                    │                   │
+                    └─────────┬─────────┘
+                              │
+           ┌─────────────────┼────────────────┐
+           │                 │                │
+  ┌────────▼─────────┐ ┌─────▼──────────┐ ┌───▼───────────────┐
+  │                  │ │                │ │                   │
+  │  Return Risk     │ │  Next Order    │ │  New Product      │
+  │  Predictor       │ │  Predictor     │ │  Purchase         │
+  │  (port 8001)     │ │  (port 8002)   │ │  Predictor        │
+  │                  │ │                │ │  (port 8003)      │
+  └──────────────────┘ └────────────────┘ └───────────────────┘
+```
+
+## Katkıda Bulunanlar
+
+Bu proje Turkcell Geleceği Yazan Kadınlar Programı kapsamında geliştirilmiştir.
 
 | İsim           | 
 |----------------|
@@ -115,7 +149,3 @@ python app.py
 | Didar Arslan   |
 | Deniz Tunç     |
 | Nurefşan Gültekin |
-
----
-
-> Bu çalışma, Turkcell Geleceği Yazan Kadınlar 2025 programı kapsamında hazırlanmıştır.
