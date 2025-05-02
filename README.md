@@ -1,45 +1,55 @@
-# Turkcell GYK - Bütünleştirilmiş API Servisleri
+# Turkcell Geleceği Yazan Kadınlar - Müşteri Davranış Tahmin Servisleri
 
-Bu repoda, Turkcell Geleceği Yazan Kadınlar Programı kapsamında geliştirilen üç bağımsız ML API projesini birleştiren bir API Gateway bulunmaktadır. Bu proje, farklı adreslerdeki ML servislerini tek bir endpoint altında birleştirerek, tüm servislerin merkezi bir şekilde yönetilmesini sağlar.
+Bu proje, Turkcell Geleceği Yazan Kadınlar Programı kapsamında geliştirilmiş olan, müşteri davranışlarını makine öğrenmesi yöntemleriyle tahmin eden üç farklı mikroservisi ve bunları birleştiren bir API Gateway içerir.
 
-## Projeler
+## Proje Yapısı
 
-Bu repo içerisinde üç farklı ML API projesi bulunmaktadır:
+Proje, aşağıdaki dört ana bileşenden oluşmaktadır:
 
-### 1. Return Risk Predictor (Ürün İade Risk Tahmini)
-
-**Klasör:** `return-risk-predictor`
-
-**Açıklama:** Müşterilerin sipariş verilerini analiz ederek iade edilme olasılığı yüksek olan siparişleri tahmin eden bir derin öğrenme modeli ve API sunar.
-
-**Endpointler:**
-- `POST /return-risk/train`: Modeli eğitir
-- `POST /return-risk/predict`: Manuel girdi ile tahmin yapar
-- `POST /return-risk/predict_by_order`: Sipariş ID ile tahmin yapar
-
-### 2. Next Order Predictor (Sonraki Sipariş Tahmini)
-
-**Klasör:** `next-order-predictor`
-
-**Açıklama:** Müşterilerin geçmiş sipariş davranışlarını analiz ederek yakın zamanda yeni bir sipariş verme olasılığını tahmin eden bir derin öğrenme modeli ve API içerir.
-
-**Endpointler:**
-- `POST /next-order/predict`: Müşterinin yeni sipariş verme olasılığını tahmin eder
-
-### 3. New Product Purchase Predictor (Yeni Ürün Satın Alma Tahmini)
-
-**Klasör:** `new-product-purchase-predictor`
-
-**Açıklama:** Müşterinin ilgi duyduğu ürün kategorilerine göre yeni bir ürün satın alma olasılığını tahmin eden bir derin öğrenme modeli ve API sunar.
-
-**Endpointler:**
-- `POST /new-product/predict`: Müşterinin yeni ürün satın alma olasılığını tahmin eder
-
-## API Gateway Entegrasyonu
+### 1. API Gateway
 
 **Klasör:** `api-gateway`
 
-API Gateway, yukarıdaki üç servisi birleştirerek tek bir API üzerinden erişilebilir hale getirir. Bu sayede farklı servislere ayrı ayrı istek yapmak yerine, tek bir endpoint üzerinden tüm servislere erişilebilir.
+**Açıklama:** Diğer üç ML servisini tek bir API üzerinden erişilebilir hale getiren, istek yönlendirme ve ortak arayüz sağlayan servis. FastAPI ile geliştirilmiştir.
+
+**Anahtar Özellikler:**
+- Tüm servisleri tek bir endpoint üzerinden sunar
+- Swagger dokümantasyonu ile kolay test imkanı
+- Asenkron HTTP istekleri ile yüksek performans
+
+### 2. Ürün İade Risk Tahmini (Return Risk Predictor)
+
+**Klasör:** `return-risk-predictor`
+
+**Açıklama:** Müşterilerin sipariş verilerini analiz ederek siparişin iade edilme olasılığını tahmin eden derin öğrenme modeli ve API.
+
+**Anahtar Özellikler:**
+- İndirim oranı, ürün miktarı, birim fiyat gibi faktörlere göre tahmin
+- Tahmin sonucunu açıklayan feature importance analizi
+- Sipariş ID'sine göre sorgulama imkanı
+
+### 3. Sonraki Sipariş Tahmini (Next Order Predictor)
+
+**Klasör:** `next-order-predictor`
+
+**Açıklama:** Müşterilerin geçmiş sipariş davranışlarını analiz ederek yakın zamanda yeni bir sipariş verme olasılığını tahmin eden derin öğrenme modeli ve API.
+
+**Anahtar Özellikler:**
+- Toplam harcama, sipariş sayısı, ortalama sipariş değeri gibi metriklere dayalı tahmin
+- Son siparişten bu yana geçen zaman analizi
+- Mevsimsellik faktörlerini dikkate alan model
+
+### 4. Yeni Ürün Satın Alma Tahmini (New Product Purchase Predictor)
+
+**Klasör:** `new-product-purchase-predictor`
+
+**Açıklama:** Müşterinin ilgi duyduğu ürün kategorilerine göre yeni bir ürün satın alma olasılığını tahmin eden derin öğrenme modeli ve API.
+
+**Anahtar Özellikler:**
+- Kategori bazlı müşteri tercihlerini analiz eder
+- Yeni ürün satın alma olasılığını tahmin eder
+
+## Kurulum ve Çalıştırma
 
 ### Gereksinimler
 
@@ -47,16 +57,31 @@ API Gateway, yukarıdaki üç servisi birleştirerek tek bir API üzerinden eri�
 - FastAPI
 - Uvicorn
 - httpx
+- TensorFlow
+- pandas, numpy, scikit-learn
 
-### Kurulum
+### Kurulum Adımları
 
-1. Gerekli paketleri yükleyin:
+1. Repo'yu klonlayın:
 ```bash
-cd api-gateway
-pip install fastapi uvicorn httpx pydantic python-dotenv
+git clone <repo-url>
+cd <repo-folder>
 ```
 
-Ayrıca, her bir servisin çalışması için ilgili klasörlerdeki requirements.txt dosyalarını yüklemeniz gerekebilir.
+2. Her bir servis için gerekli paketleri yükleyin:
+```bash
+cd api-gateway
+pip install -r requirements.txt
+
+cd ../return-risk-predictor
+pip install -r requirements.txt
+
+cd ../next-order-predictor
+pip install -r requirements.txt
+
+cd ../new-product-purchase-predictor
+pip install -r requirements.txt
+```
 
 ### Çalıştırma
 
@@ -69,15 +94,28 @@ debug_start.bat
 
 Bu komut sırasıyla:
 1. Return Risk API'yi başlatır (port 8001)
-2. Next Order API'yi başlatır (port 8002) 
+2. Next Order API'yi başlatır (port 8002)
 3. New Product API'yi başlatır (port 8003)
 4. API Gateway'i başlatır (port 8080)
 
-### Kullanım
+## API Kullanımı
 
 API Gateway'e erişmek için: `http://localhost:8080/docs`
 
-Swagger UI üzerinden tüm endpointleri test edebilirsiniz. API Gateway, isteği uygun servise yönlendirir ve yanıtı alıp size geri döndürür.
+Bu adreste Swagger UI aracılığıyla tüm API endpointlerini inceleyebilir ve test edebilirsiniz.
+
+### Servis Endpointleri
+
+**Ürün İade Risk Skoru API**
+- `POST /return-risk/train`: Modeli eğitir
+- `POST /return-risk/predict`: Manuel girdi ile tahmin yapar
+- `POST /return-risk/predict_by_order`: Sipariş ID ile tahmin yapar
+
+**Sonraki Sipariş Tahmini API**
+- `POST /next-order/predict`: Müşterinin yeni sipariş verme olasılığını tahmin eder
+
+**Yeni Ürün Satın Alma Tahmini API**
+- `POST /new-product/predict`: Müşterinin yeni ürün satın alma olasılığını tahmin eder
 
 ## Örnek İstekler
 
@@ -116,7 +154,7 @@ POST /new-product/predict
 }
 ```
 
-## Mimari
+## Mimari Diyagramı
 
 ```
                     ┌───────────────────┐
@@ -137,15 +175,23 @@ POST /new-product/predict
   └──────────────────┘ └────────────────┘ └───────────────────┘
 ```
 
+## Teknolojiler
+
+- **Backend Framework:** FastAPI
+- **ML Framework:** TensorFlow, scikit-learn
+- **Veri İşleme:** pandas, numpy
+- **API Client:** httpx
+- **API Dokümantasyonu:** Swagger UI (FastAPI entegrasyonu)
+
 ## Katkıda Bulunanlar
 
 Bu proje Turkcell Geleceği Yazan Kadınlar Programı kapsamında geliştirilmiştir.
 
-| İsim           | 
-|----------------|
-| Elif Barutçu   |
-| Özge Taraşlı   | 
-| Mine Emektar   | 
-| Didar Arslan   |
-| Deniz Tunç     |
-| Nurefşan Gültekin |
+| İsim               |
+|--------------------|
+| Elif Barutçu       |
+| Özge Taraşlı       |
+| Mine Emektar       |
+| Didar Arslan       |
+| Deniz Tunç         |
+| Nurefşan Gültekin  |
